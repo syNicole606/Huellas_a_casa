@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huellas a Casa - Clínica Veterinaria</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* --- Estilos propios del ícono de perfil (no tocan /static/styles.css) --- */
+        #liRegistrarse.oculto,
+        #liPerfil.oculto {
+            display: none !important;
+        }
+        #liPerfil {
+            position: relative;
+        }
+        .profile-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #7db8e0, #5da0cc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+        }
+        .profile-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 46px;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid #e1e8ed;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            padding: 16px;
+            min-width: 220px;
+            z-index: 200;
+        }
+        .profile-dropdown.abierto {
+            display: block;
+        }
+        .profile-dropdown .pd-nombre {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+        .profile-dropdown .pd-correo {
+            font-size: 13px;
+            color: #718096;
+            margin-bottom: 14px;
+            word-break: break-all;
+        }
+        /* Nuevo: link al panel de administración (solo visible para admin) */
+        .profile-dropdown .pd-admin-link {
+            display: block;
+            text-align: left;
+            width: 100%;
+            padding: 9px 0;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #537ED4;
+            text-decoration: none;
+        }
+        .profile-dropdown .pd-admin-link:hover {
+            color: #2243A3;
+        }
+        .profile-dropdown .pd-logout {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #fdecec;
+            color: #c0392b;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .profile-dropdown .pd-logout:hover {
+            background: #fbd8d8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <div class="logo">
+            <img src="/static/assets/logoo.png" alt="Logo Huellas a Casa">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/notificaciones.html">Notificaciones</a></li>
+                <li id="liRegistrarse"><a href="/iniciarsesion.html">Registrarse</a></li>
+                <li id="liCart"><a href="/carritocompras.html" id="linkCart" onclick="return validarAccesoCarrito()">Cart Shopping</a></li>
+                <li id="liPerfil" class="oculto">
+                    <button type="button" class="profile-btn" id="profileBtn" title="Mi perfil">
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <p class="pd-nombre" id="pdNombre">—</p>
+                        <p class="pd-correo" id="pdCorreo">—</p>
+                        <!-- Nuevo: solo visible para admin -->
+                        <a href="paneladmin.html" class="pd-admin-link oculto" id="pdAdminLink">⚙️ Panel de administración</a>
+                        <button type="button" class="pd-logout" id="btnCerrarSesion">Cerrar sesión</button>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Banner principal con texto y carrusel -->
+    <section class="banner" id="inicio">
+        <!-- Texto arriba -->
+        <div class="banner-content">
+            <h1>Bienvenidos a Huellas a Casa</h1>
+            <p>El mejor cuidado para tu compañero fiel.</p>
+        </div>
+
+        <!-- Carrusel de imágenes -->
+        <div class="slider">
+            <div class="slides">
+               <img src="/static/assets/imagen1.jpg" alt="Imagen 1">
+               <img src="/static/assets/imagen2.jpg" alt="Imagen 2">
+               <img src="/static/assets/imagen3.jpg" alt="Imagen 3">
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Tarjetas de Servicios -->
+    <section class="servicios">
+        <div class="container">
+            <div class="card">
+                <h3>Citas médicas</h3>
+                <a href="citas.html" class="btn">Entra aquí</a>
+            </div>
+            <div class="card">
+                <h3>SHOP</h3>
+                <a href="shop.html" class="btn">Entra aquí</a>
+            </div>
+            <div class="card">
+                <h3>Información de la clínica veterinaria Huellas a Casa</h3>
+                <a href="nosotros.html" class="btn">Entra aquí</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pie de Página -->
+    <footer>
+        <p>&copy; 2023 Huellas a Casa. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const liRegistrarse = document.getElementById('liRegistrarse');
+        const liPerfil = document.getElementById('liPerfil');
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const pdNombre = document.getElementById('pdNombre');
+        const pdCorreo = document.getElementById('pdCorreo');
+        const pdAdminLink = document.getElementById('pdAdminLink');
+        const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+
+        function validarAccesoCarrito() {
+            const usuario = JSON.parse(sessionStorage.getItem('usuario') || 'null');
+            if (!usuario) {
+                alert('Debes iniciar sesión para acceder al carrito de compras.');
+                window.location.href = '/iniciarsesion.html';
+                return false; // evita que el <a> navegue a carritocompras.html
+            }
+            return true; // usuario con sesión: navega normalmente
+        }
+
+        function actualizarHeader() {
+            const usuario = JSON.parse(sessionStorage.getItem('usuario') || 'null');
+
+            if (usuario) {
+                // Sesión iniciada: se oculta "Registrarse" y aparece el ícono de perfil
+                // en el espacio que deja libre (Cart Shopping queda a la izquierda de él).
+                liRegistrarse.classList.add('oculto');
+                liPerfil.classList.remove('oculto');
+                pdNombre.textContent = usuario.nombre || 'Usuario';
+                pdCorreo.textContent = usuario.correo || '';
+
+                // Nuevo: solo admin ve el acceso al panel
+                if (usuario.rol === 'admin') {
+                    pdAdminLink.classList.remove('oculto');
+                } else {
+                    pdAdminLink.classList.add('oculto');
+                }
+            } else {
+                // Sin sesión: todo vuelve exactamente a como estaba.
+                liRegistrarse.classList.remove('oculto');
+                liPerfil.classList.add('oculto');
+                profileDropdown.classList.remove('abierto');
+            }
+        }
+
+        profileBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('abierto');
+        });
+
+        // Cierra el menú si el usuario hace clic fuera de él
+        document.addEventListener('click', function (e) {
+            if (!liPerfil.contains(e.target)) {
+                profileDropdown.classList.remove('abierto');
+            }
+        });
+
+        btnCerrarSesion.addEventListener('click', function () {
+            sessionStorage.removeItem('usuario');
+            actualizarHeader();
+        });
+
+        actualizarHeader();
+    </script>
+
+</body>
+</html>
