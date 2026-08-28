@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Administración - Huellas a Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: linear-gradient(135deg, #fff0f5 0%, #fde8f0 100%);
+    min-height: 100vh;
+  }
+  .header {
+    background: linear-gradient(90deg, #e8829a 0%, #f0a0b5 100%);
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 3px 12px rgba(220,100,130,0.18);
+  }
+  .header-title {
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.18rem;
+    color: #fff; display: flex; align-items: center; gap: 10px;
+  }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+  .header-rol {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.4);
+  }
+  .header-avatar {
+    width: 38px; height: 38px; background: rgba(255,255,255,0.3);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(255,255,255,0.5); cursor: pointer;
+  }
+  .header-avatar svg { width: 20px; height: 20px; fill: #fff; }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 36px 24px 60px; }
+
+  .section-label {
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+    color: #d4607a; letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 22px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 2px;
+    background: linear-gradient(90deg, #f5b8cb 0%, transparent 100%);
+    border-radius: 2px; margin-left: 6px;
+  }
+
+  .grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  .module-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 18px;
+    border: 1.5px solid #f5c8d8;
+    box-shadow: 0 4px 20px rgba(220,100,130,0.09);
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(220,100,130,0.16);
+  }
+
+  .module-icon {
+    width: 46px; height: 46px;
+    background: linear-gradient(135deg, #f9d0de, #f5b8cb);
+    border: 1.5px solid #f0a0b8;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .module-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #c0486a;
+  }
+  .module-desc {
+    font-size: 0.86rem;
+    color: #7a4a58;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .module-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.82rem;
+    color: #d4607a;
+  }
+  .module-badge {
+    background: #fdeef3;
+    border: 1px solid #f5c8d8;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.72rem;
+  }
+
+  /* --- Zona de contenido dinámico (tabla de resultados) --- */
+  .panel-box {
+    background: rgba(255,255,255,0.95);
+    border-radius: 18px;
+    border: 1.5px solid #f5c8d8;
+    box-shadow: 0 4px 20px rgba(220,100,130,0.09);
+    overflow: hidden;
+    display: none;
+  }
+  .panel-box.show { display: block; }
+
+  .panel-box-header {
+    background: linear-gradient(90deg, #fdeef3 0%, #fff8fa 100%);
+    padding: 16px 24px;
+    border-bottom: 1.5px solid #f5c8d8;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-box-title {
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; color: #c0486a;
+  }
+  .btn-cerrar-panel {
+    background: none; border: none; font-size: 1.1rem; color: #d4607a; cursor: pointer;
+  }
+
+  .panel-box-body { padding: 20px 24px; max-height: 420px; overflow-y: auto; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  th {
+    text-align: left; font-family: 'Nunito', sans-serif; font-weight: 800;
+    color: #d4607a; padding: 8px 10px; border-bottom: 2px solid #f5c8d8;
+    white-space: nowrap;
+  }
+  td { padding: 9px 10px; border-bottom: 1px solid #fdeef3; color: #5a3a44; }
+  tr:hover td { background: #fff8fa; }
+
+  .estado-vacio, .estado-cargando {
+    text-align: center; padding: 30px; color: #d4a0b0; font-size: 0.9rem;
+  }
+
+  .bottom-actions { display: flex; justify-content: flex-end; margin-top: 24px; }
+  .btn-secondary {
+    background: #fff; color: #d4607a; border: 2px solid #f5b8cb;
+    border-radius: 10px; padding: 10px 24px;
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.97rem;
+    cursor: pointer; display: flex; align-items: center; gap: 8px;
+    transition: transform 0.15s, background 0.2s;
+  }
+  .btn-secondary:hover { background: #fdeef3; transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">🐾 Clínica Veterinaria Huellas a Casa</div>
+  <div class="header-right">
+    <span class="header-rol" id="headerRol">Admin</span>
+    <div class="header-avatar" id="headerAvatar" title="Cerrar sesión">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="section-label">Panel de administración</div>
+
+  <div class="grid-cards">
+
+    <div class="module-card" onclick="abrirModulo('citas')">
+      <div class="module-icon">📅</div>
+      <div class="module-title">Gestión de citas</div>
+      <div class="module-desc">Consulta todas las citas agendadas por servicio, veterinario y estado. Cancela o reprograma cuando sea necesario.</div>
+      <div class="module-footer"><span>Ver citas</span><span class="module-badge">/api/citas_admin</span></div>
+    </div>
+
+    <div class="module-card" onclick="abrirModulo('usuarios')">
+      <div class="module-icon">👥</div>
+      <div class="module-title">Usuarios y roles</div>
+      <div class="module-desc">Consulta las cuentas registradas y asigna roles (cliente, veterinario, encargado de tienda, admin).</div>
+      <div class="module-footer"><span>Ver usuarios</span><span class="module-badge">/api/usuarios</span></div>
+    </div>
+
+    <div class="module-card" onclick="abrirModulo('pedidos')">
+      <div class="module-icon">🛍️</div>
+      <div class="module-title">Tienda / Pedidos</div>
+      <div class="module-desc">Revisa los pedidos realizados en la tienda, su estado de pago y el detalle de productos comprados.</div>
+      <div class="module-footer"><span>Ver pedidos</span><span class="module-badge">/api/pedidos</span></div>
+    </div>
+
+    <div class="module-card" onclick="abrirModulo('notificaciones')">
+      <div class="module-icon">🔔</div>
+      <div class="module-title">Notificaciones y promociones</div>
+      <div class="module-desc">Envía notificaciones o promociones a los usuarios registrados en la plataforma.</div>
+      <div class="module-footer"><span>Gestionar</span><span class="module-badge">/api/notificaciones_admin</span></div>
+    </div>
+
+  </div>
+
+  <!-- Zona donde se renderiza la tabla del módulo seleccionado -->
+  <div class="panel-box" id="panelBox">
+    <div class="panel-box-header">
+      <span class="panel-box-title" id="panelTitulo">—</span>
+      <button class="btn-cerrar-panel" onclick="cerrarPanel()">✕</button>
+    </div>
+    <div class="panel-box-body" id="panelBody">
+      <div class="estado-cargando">Cargando...</div>
+    </div>
+  </div>
+
+  <div class="bottom-actions">
+    <button class="btn-secondary" onclick="window.location.href='index.html'">
+      ← Volver al menú principal
+    </button>
+  </div>
+</div>
+
+<script>
+  // ---------------------------------------------------------------
+  // Guardia de acceso: mismo patrón que fincompra.html / agendatucita.html
+  // Solo entra quien tenga rol admin (ajusta el nombre si tu
+  // migración usó otro valor para el rol de administrador).
+  // ---------------------------------------------------------------
+  function obtenerUsuario() {
+    return JSON.parse(sessionStorage.getItem('usuario') || 'null');
+  }
+
+  const usuarioActual = obtenerUsuario();
+  if (!usuarioActual) {
+    alert('Debes iniciar sesión para acceder al panel de administración.');
+    window.location.href = 'iniciarsesion.html';
+  } else if (usuarioActual.rol !== 'admin') {
+    alert('No tienes permisos para acceder a esta sección.');
+    window.location.href = 'index.html';
+  } else {
+    document.getElementById('headerRol').textContent = usuarioActual.nombre || 'Administrador';
+  }
+
+  document.getElementById('headerAvatar').addEventListener('click', () => {
+    if (confirm('¿Cerrar sesión?')) {
+      sessionStorage.removeItem('usuario');
+      window.location.href = 'iniciarsesion.html';
+    }
+  });
+
+  // ---------------------------------------------------------------
+  // Definición de módulos: cada uno apunta a un endpoint (ya protegido
+  // en el backend con verificar_rol('admin')) y sabe cómo
+  // pintar su propia tabla con los datos que reciba.
+  // ---------------------------------------------------------------
+  const MODULOS = {
+    citas: {
+      titulo: '📅 Gestión de citas',
+      endpoint: '/api/citas_admin',
+      columnas: ['id_cita', 'dueño', 'mascota', 'veterinario', 'servicio', 'fecha', 'hora', 'estado'],
+    },
+    usuarios: {
+      titulo: '👥 Usuarios y roles',
+      endpoint: '/api/usuarios',
+      columnas: ['id', 'nombre', 'correo', 'rol'],
+    },
+    pedidos: {
+      titulo: '🛍️ Tienda / Pedidos',
+      endpoint: '/api/pedidos',
+      columnas: ['id_pedido', 'cliente', 'total', 'metodo_pago', 'estado', 'fecha'],
+    },
+    notificaciones: {
+      titulo: '🔔 Notificaciones y promociones',
+      endpoint: '/api/notificaciones_admin',
+      columnas: ['id', 'titulo', 'tipo', 'enviada_a', 'fecha'],
+    }
+  };
+
+  async function abrirModulo(clave) {
+    const modulo = MODULOS[clave];
+    const box = document.getElementById('panelBox');
+    const body = document.getElementById('panelBody');
+
+    document.getElementById('panelTitulo').textContent = modulo.titulo;
+    body.innerHTML = '<div class="estado-cargando">Cargando...</div>';
+    box.classList.add('show');
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    try {
+      const respuesta = await fetch(`${modulo.endpoint}?id_usuario=${usuarioActual.id}`);
+      const data = await respuesta.json();
+
+      if (!data.exito) {
+        body.innerHTML = `<div class="estado-vacio">${data.mensaje || 'No se pudo cargar la información.'}</div>`;
+        return;
+      }
+
+      const filas = data.resultados || [];
+      if (filas.length === 0) {
+        body.innerHTML = '<div class="estado-vacio">No hay registros por ahora.</div>';
+        return;
+      }
+
+      const encabezado = modulo.columnas.map(c => `<th>${c}</th>`).join('');
+      const cuerpo = filas.map(fila => `
+        <tr>${modulo.columnas.map(c => `<td>${fila[c] ?? '—'}</td>`).join('')}</tr>
+      `).join('');
+
+      body.innerHTML = `
+        <table>
+          <thead><tr>${encabezado}</tr></thead>
+          <tbody>${cuerpo}</tbody>
+        </table>
+      `;
+    } catch (error) {
+      body.innerHTML = '<div class="estado-vacio">Error de conexión con el servidor.</div>';
+      console.error(error);
+    }
+  }
+
+  function cerrarPanel() {
+    document.getElementById('panelBox').classList.remove('show');
+  }
+</script>
+
+</body>
+</html>

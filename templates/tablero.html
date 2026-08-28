@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: linear-gradient(135deg, #fff0f5 0%, #fde8f0 100%);
+    min-height: 100vh;
+  }
+  .header {
+    background: linear-gradient(90deg, #e8829a 0%, #f0a0b5 100%);
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 3px 12px rgba(220,100,130,0.18);
+  }
+  .header-title {
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.18rem;
+    color: #fff; display: flex; align-items: center; gap: 10px;
+  }
+  .header-avatar {
+    width: 38px; height: 38px; background: rgba(255,255,255,0.3);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(255,255,255,0.5); cursor: pointer;
+  }
+  .header-avatar svg { width: 20px; height: 20px; fill: #fff; }
+
+  .main { max-width: 700px; margin: 0 auto; padding: 36px 24px 60px; }
+
+  .section-label {
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+    color: #d4607a; letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 22px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 2px;
+    background: linear-gradient(90deg, #f5b8cb 0%, transparent 100%);
+    border-radius: 2px; margin-left: 6px;
+  }
+
+  .service-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 18px;
+    border: 1.5px solid #f5c8d8;
+    box-shadow: 0 4px 20px rgba(220,100,130,0.09);
+    padding: 24px 26px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(220,100,130,0.16);
+  }
+  .service-card:hover .service-title {
+    text-decoration: underline;
+  }
+
+  .service-badge {
+    min-width: 130px;
+    background: linear-gradient(135deg, #f9d0de, #f5b8cb);
+    border: 1.5px solid #f0a0b8;
+    border-radius: 12px;
+    padding: 10px 16px;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.92rem;
+    color: #c0486a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+  }
+  .service-badge .icon { font-size: 1.6rem; }
+
+  .service-info { flex: 1; }
+  .service-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #c0486a;
+    margin-bottom: 7px;
+  }
+  .service-desc {
+    font-size: 0.91rem;
+    color: #7a4a58;
+    line-height: 1.65;
+  }
+  .service-tags {
+    margin-top: 10px;
+    display: flex; flex-wrap: wrap; gap: 7px;
+  }
+  .tag {
+    background: #fdeef3;
+    border: 1px solid #f5c8d8;
+    border-radius: 20px;
+    padding: 3px 11px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    color: #d4607a;
+  }
+
+  .arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: #f0a0b5; font-size: 1.4rem; align-self: center;
+    transition: transform 0.15s;
+  }
+  .service-card:hover .arrow { transform: translateX(4px); color: #d4607a; }
+
+  .bottom-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  .btn-secondary {
+    background: #fff; color: #d4607a; border: 2px solid #f5b8cb;
+    border-radius: 10px; padding: 10px 24px;
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.97rem;
+    cursor: pointer; display: flex; align-items: center; gap: 8px;
+    transition: transform 0.15s, background 0.2s;
+  }
+  .btn-secondary:hover { background: #fdeef3; transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">🐾 Clínica Veterinaria Huellas a Casa</div>
+  <div class="header-avatar">
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+  </div>
+</div>
+
+<div class="main">
+  <div class="section-label">Nuestros Servicios</div>
+
+  <!-- Consulta General -->
+  <div class="service-card" onclick="window.location.href='consulta.html'">
+    <div class="service-badge">
+      <span class="icon">🩺</span>
+      Consulta General
+    </div>
+    <div class="service-info">
+      <div class="service-title">Consulta General</div>
+      <div class="service-desc">
+        Revisión completa del estado de salud de tu mascota con uno de nuestros veterinarios. Evaluamos peso, temperatura, reflejos y signos vitales para detectar cualquier anomalía a tiempo.
+      </div>
+      <div class="service-tags">
+        <span class="tag">⏱ 30–45 min</span>
+        <span class="tag">Todas las mascotas</span>
+        <span class="tag">Primera visita</span>
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <!-- Vacunación -->
+  <div class="service-card" onclick="window.location.href='vacunacion.html'">
+    <div class="service-badge">
+      <span class="icon">💉</span>
+      Vacunación
+    </div>
+    <div class="service-info">
+      <div class="service-title">Vacunación</div>
+      <div class="service-desc">
+        Aplicación de vacunas esenciales para proteger a tu mascota contra enfermedades graves. Contamos con esquemas de vacunación para perros, gatos y pequeños animales según su edad y historial.
+      </div>
+      <div class="service-tags">
+        <span class="tag">⏱ 15–20 min</span>
+        <span class="tag">Perros y gatos</span>
+        <span class="tag">Esquema completo</span>
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <!-- Desparasitación -->
+  <div class="service-card" onclick="window.location.href='desparasitacion.html'">
+    <div class="service-badge">
+      <span class="icon">🐛</span>
+      Desparasitación
+    </div>
+    <div class="service-info">
+      <div class="service-title">Desparasitación</div>
+      <div class="service-desc">
+        Tratamiento interno y externo para eliminar parásitos que afectan la salud de tu mascota. Recomendamos realizarlo cada 3 meses para mantener a tu compañero libre de pulgas, garrapatas y lombrices.
+      </div>
+      <div class="service-tags">
+        <span class="tag">⏱ 10–15 min</span>
+        <span class="tag">Cada 3 meses</span>
+        <span class="tag">Interno y externo</span>
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <!-- Control -->
+  <div class="service-card" onclick="window.location.href='control.html'">
+    <div class="service-badge">
+      <span class="icon">📋</span>
+      Control
+    </div>
+    <div class="service-info">
+      <div class="service-title">Control de Seguimiento</div>
+      <div class="service-desc">
+        Cita de seguimiento para verificar la evolución de tratamientos previos o monitorear el peso y desarrollo de tu mascota. Ideal para pacientes en recuperación o con condiciones crónicas.
+      </div>
+      <div class="service-tags">
+        <span class="tag">⏱ 20–30 min</span>
+        <span class="tag">Seguimiento</span>
+        <span class="tag">Post-tratamiento</span>
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <div class="bottom-actions">
+    <button class="btn-secondary" onclick="window.location.href='index.html'">
+      ← Volver al menú principal
+    </button>
+  </div>
+</div>
+
+</body>
+</html>

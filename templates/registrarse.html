@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrarse</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f2f5fd;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card {
+      background: #f8f9ff;
+      border: 1px solid #c0cef4;
+      border-radius: 20px;
+      padding: 2.5rem 2rem 2rem;
+      width: 360px;
+      position: relative;
+      box-shadow: 0 4px 24px rgba(83, 112, 212, 0.08);
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #537ED4;
+      font-size: 13px;
+      padding: 0;
+      margin-bottom: 1.2rem;
+      text-decoration: none;
+    }
+    .btn-back:hover { color: #2243A3; }
+    .btn-back::before { content: "←"; }
+
+    .title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: #243E93;
+      margin-bottom: 1.8rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #c0cef4;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 14px;
+      color: #243E93;
+      margin-bottom: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus {
+      border-color: #537ED4;
+      box-shadow: 0 0 0 3px rgba(83,126,212,0.12);
+    }
+    .form-input::placeholder { color: #93AEE8; }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #c0cef4;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #243E93;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #93AEE8; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <a href="iniciarsesion.html" class="btn-back">Volver</a>
+
+  <p class="title">🐾 Registrarse</p>
+
+  <input class="form-input" type="text" id="nombre" placeholder="Nombre completo" />
+  <input class="form-input" type="text" id="cedula" placeholder="Cédula" />
+  <input class="form-input" type="email" id="correo" placeholder="Correo" />
+  <input class="form-input" type="password" id="contrasena" placeholder="Contraseña" />
+  <input class="form-input" type="tel" id="telefono" placeholder="Teléfono" />
+
+  <p id="mensaje" style="color:#D4537E; font-size:13px; margin-bottom:10px;"></p>
+
+  <button class="btn-primary" onclick="registrarUsuario()">Confirmar</button>
+</div>
+
+<script>
+async function registrarUsuario() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const cedula = document.getElementById('cedula').value.trim();
+  const correo = document.getElementById('correo').value.trim();
+  const contrasena = document.getElementById('contrasena').value;
+  const telefono = document.getElementById('telefono').value.trim();
+  const mensaje = document.getElementById('mensaje');
+
+  if (!nombre || !correo || !contrasena) {
+    mensaje.textContent = "Por favor completa nombre, correo y contraseña.";
+    return;
+  }
+
+  try {
+    const respuesta = await fetch('/api/registrar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, cedula, correo, contrasena, telefono })
+    });
+
+    const data = await respuesta.json();
+
+    if (data.exito) {
+      // Iniciamos sesión inmediatamente con los datos del usuario recién registrado,
+      // igual que hace iniciarsesion.html tras un login exitoso.
+      sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
+      window.location.href = 'index.html';
+    } else {
+      mensaje.textContent = data.mensaje;
+    }
+  } catch (error) {
+    mensaje.textContent = "Error de conexión con el servidor.";
+    console.error(error);
+  }
+}
+</script>
+
+</body>
+</html>
